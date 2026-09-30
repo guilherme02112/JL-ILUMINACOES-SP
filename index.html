@@ -64,6 +64,9 @@
   }
   .btn:hover { transform: translateY(-2px); }
   .btn[hidden] { display: none; }
+  .conexao { font-family: "Outfit", sans-serif; font-size: .78rem; font-weight: 600; padding: 3px 10px; border-radius: 999px; margin-left: 6px; vertical-align: 2px; }
+  .conexao.ok { background: #d9ecd2; color: #2f5a27; }
+  .conexao.erro { background: #f6d5cc; color: #8a2f1c; }
   .carregando #cats, .carregando #grid { opacity: 0; }
   #cats, #grid { transition: opacity .3s; }
   .btn svg { width: 20px; height: 20px; flex: none; }
@@ -550,7 +553,7 @@
 
 <!-- Barra do modo de edição -->
 <div class="edit-bar" id="edit-bar">
-  <b>Modo de edição</b>
+  <b>Modo de edição <span class="conexao" id="conexao"></span></b>
   <label class="btn btn-wood">+ Adicionar fotos<input type="file" id="add-fotos" accept="image/*" multiple hidden></label>
   <button class="btn btn-moss" id="salvar-site" style="background:#fff;color:var(--moss-dark)">✔ Salvar no site</button>
   <button class="btn btn-ghost" id="baixar">Baixar galeria.js</button>
@@ -849,6 +852,7 @@
   function entrarEditor() {
     document.body.classList.add("editing");
     mEditar.querySelector("span").textContent = "Sair da edição";
+    mostrarConexao();
     document.getElementById("produtos").scrollIntoView({ behavior: "smooth" });
   }
   function sairEditor() {
@@ -1081,6 +1085,17 @@
   // ---------- Salvar direto na pasta do site (só com o servidor.js rodando) ----------
   if (sb) document.body.classList.add("pode-salvar");
   else fetch("salvar").then(r => { if (r.status === 204) document.body.classList.add("pode-salvar"); }).catch(() => {});
+
+  // Mostra na barra de edição para onde as alterações vão
+  async function mostrarConexao() {
+    const el = document.getElementById("conexao");
+    const marcar = (ok, texto) => { el.className = "conexao " + (ok ? "ok" : "erro"); el.textContent = texto; };
+    if (!sb) return marcar(false, CFG.url ? "⚠ Supabase não carregou — salva só neste aparelho" : "Modo local");
+    const { data } = await sb.auth.getSession();
+    if (!data.session) return marcar(false, "⚠ Sem login no Supabase — saia e entre de novo");
+    const { error } = await sb.from("conteudo").select("id").limit(1);
+    marcar(!error, error ? "⚠ Supabase com erro: " + error.message : "✓ Conectado ao Supabase");
+  }
 
   // ---------- Salvar no Supabase ----------
   const urlPublica = caminho => sb.storage.from(CFG.bucket).getPublicUrl(caminho).data.publicUrl;
