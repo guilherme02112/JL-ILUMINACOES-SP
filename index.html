@@ -787,11 +787,21 @@
     if (sb) { const { data } = await sb.auth.getSession(); return !!data.session; }
     try { return sessionStorage.getItem("jl-editor") === "1"; } catch (e) { return false; }
   }
+  let ultimoErroLogin = "";
   async function conferirSenha(senha) {
-    if (sb) { const { error } = await sb.auth.signInWithPassword({ email: CFG.emailEditor, password: senha }); return !error; }
+    if (sb) {
+      const { error } = await sb.auth.signInWithPassword({ email: CFG.emailEditor, password: senha });
+      ultimoErroLogin = !error ? "" :
+        /confirm/i.test(error.message) ? `O usuário ${CFG.emailEditor} não está confirmado no Supabase (Authentication → Users).` :
+        /invalid login/i.test(error.message) ? `Senha incorreta — ou o usuário ${CFG.emailEditor} não existe no Supabase.` :
+        "Erro do Supabase: " + error.message;
+      return !error;
+    }
     const hash = await sha256(senha);
+    ultimoErroLogin = "Senha incorreta.";
     return hash === site.senhaHash || hash === window.SITE.senhaHash;
   }
+  if (sb) modalSenha.querySelector("p").textContent = `Digite a senha do usuário ${CFG.emailEditor}, criado no Supabase.`;
   mEditar.onclick = async () => {
     if (editando()) sairEditor();
     else if (await liberadoAsync()) entrarEditor();
@@ -803,7 +813,7 @@
       try { sessionStorage.setItem("jl-editor", "1"); } catch (err) {}
       fecharModal(modalSenha); entrarEditor();
     } else {
-      document.getElementById("senha-erro").textContent = "Senha incorreta.";
+      document.getElementById("senha-erro").textContent = ultimoErroLogin || "Senha incorreta.";
       document.getElementById("senha").select();
     }
   });
