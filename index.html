@@ -64,6 +64,8 @@
   }
   .btn:hover { transform: translateY(-2px); }
   .btn[hidden] { display: none; }
+  .carregando #cats, .carregando #grid { opacity: 0; }
+  #cats, #grid { transition: opacity .3s; }
   .btn svg { width: 20px; height: 20px; flex: none; }
   .btn-moss { background: var(--moss); color: #fff; box-shadow: 0 8px 22px rgba(86, 112, 77, .28); }
   .btn-moss:hover { background: var(--moss-dark); }
@@ -585,8 +587,8 @@
     <h3><svg><use href="#i-lock"/></svg> Mudar senha de acesso</h3>
     <p>Senha usada para entrar na edição de fotos e produtos.</p>
     <input type="password" id="atual" placeholder="Senha atual" autocomplete="current-password" required>
-    <input type="password" id="nova1" placeholder="Nova senha" autocomplete="new-password" minlength="4" required>
-    <input type="password" id="nova2" placeholder="Repita a nova senha" autocomplete="new-password" minlength="4" required>
+    <input type="password" id="nova1" placeholder="Nova senha" autocomplete="new-password" minlength="6" required>
+    <input type="password" id="nova2" placeholder="Repita a nova senha" autocomplete="new-password" minlength="6" required>
     <div class="erro" id="nova-erro"></div>
     <div class="row">
       <button type="button" class="btn btn-ghost" data-fechar>Cancelar</button>
@@ -617,15 +619,21 @@
 </div>
 
 <script src="galeria.js"></script>
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
   const CHAVE = "jl-site-rascunho";
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const original = () => JSON.parse(JSON.stringify(window.SITE));
 
-  // Rascunho salvo neste navegador (modo de edição) tem prioridade sobre galeria.js
-  let site;
-  try { site = JSON.parse(localStorage.getItem(CHAVE)); } catch (e) {}
-  if (!site || !Array.isArray(site.fotos)) site = original();
+  // Supabase (se configurado em supabase-config.js): conteúdo na tabela "conteudo", fotos no Storage
+  const CFG = window.SUPABASE || {};
+  const sb = CFG.url && CFG.chave && window.supabase ? window.supabase.createClient(CFG.url, CFG.chave) : null;
+
+  // Rascunho salvo neste navegador (modo de edição) tem prioridade sobre o conteúdo publicado
+  let site, temRascunho = false;
+  try { site = JSON.parse(localStorage.getItem(CHAVE)); temRascunho = !!(site && Array.isArray(site.fotos)); } catch (e) {}
+  if (!temRascunho) site = original();
 
   const catsEl = document.getElementById("cats");
   const filtersEl = document.getElementById("filters");
@@ -697,6 +705,23 @@
   }
   renderCats(); renderFotos();
 
+  // Busca o conteúdo publicado no Supabase (todo visitante vê a versão mais nova)
+  async function carregarDoSupabase() {
+    const { data, error } = await sb.from("conteudo").select("dados").eq("id", 1).maybeSingle();
+    if (error) throw error;
+    return data && data.dados;
+  }
+  if (sb) {
+    document.body.classList.add("carregando");
+    const limite = new Promise(r => setTimeout(r, 4000));   // não deixa o site em branco se o Supabase demorar
+    Promise.race([carregarDoSupabase(), limite]).then(dados => {
+      if (dados && Array.isArray(dados.fotos)) {
+        window.SITE = { ...dados, senhaHash: window.SITE.senhaHash };
+        if (!temRascunho) { site = original(); renderCats(); renderFotos(); filtrar(filtroAtual); }
+      }
+    }).catch(e => console.warn("Supabase:", e.message)).finally(() => document.body.classList.remove("carregando"));
+  }
+
   // Filtros
   function filtrar(f) {
     filtroAtual = f;
@@ -754,16 +779,24 @@
     modalPg.resolver = null; fecharModal(modalPg); r && r(valor);
   });
 
-  const liberado = () => { try { return sessionStorage.getItem("jl-editor") === "1"; } catch (e) { return false; } };
-  mEditar.onclick = () => {
+  // Com Supabase, a senha é a do usuário editor (Supabase Auth). Sem Supabase, é o hash do galeria.js.
+  async function liberadoAsync() {
+    if (sb) { const { data } = await sb.auth.getSession(); return !!data.session; }
+    try { return sessionStorage.getItem("jl-editor") === "1"; } catch (e) { return false; }
+  }
+  async function conferirSenha(senha) {
+    if (sb) { const { error } = await sb.auth.signInWithPassword({ email: CFG.emailEditor, password: senha }); return !error; }
+    const hash = await sha256(senha);
+    return hash === site.senhaHash || hash === window.SITE.senhaHash;
+  }
+  mEditar.onclick = async () => {
     if (editando()) sairEditor();
-    else if (liberado()) entrarEditor();
+    else if (await liberadoAsync()) entrarEditor();
     else abrirModal(modalSenha);
   };
   document.getElementById("form-senha").addEventListener("submit", async e => {
     e.preventDefault();
-    const hash = await sha256(document.getElementById("senha").value);
-    if (hash === site.senhaHash || hash === window.SITE.senhaHash) {
+    if (await conferirSenha(document.getElementById("senha").value)) {
       try { sessionStorage.setItem("jl-editor", "1"); } catch (err) {}
       fecharModal(modalSenha); entrarEditor();
     } else {
@@ -776,8 +809,19 @@
   document.getElementById("form-nova").addEventListener("submit", async e => {
     e.preventDefault();
     const erro = document.getElementById("nova-erro");
-    const atual = await sha256(document.getElementById("atual").value);
     const a = document.getElementById("nova1").value, b = document.getElementById("nova2").value;
+    if (sb) {
+      if (!await conferirSenha(document.getElementById("atual").value)) { erro.textContent = "A senha atual está incorreta."; return; }
+      if (a !== b) { erro.textContent = "As senhas novas não são iguais."; return; }
+      if (a.length < 6) { erro.textContent = "A senha nova precisa ter pelo menos 6 caracteres."; return; }
+      const { error } = await sb.auth.updateUser({ password: a });
+      if (error) { erro.textContent = "Não foi possível trocar: " + error.message; return; }
+      fecharModal(modalNova);
+      if (editando()) msg.textContent = "Senha alterada. A nova senha já está valendo.";
+      perguntar({ titulo: "Senha alterada", texto: "A nova senha já está valendo em todos os aparelhos.", ok: "OK", semCancelar: true });
+      return;
+    }
+    const atual = await sha256(document.getElementById("atual").value);
     const comServidor = document.body.classList.contains("pode-salvar");
     if (!comServidor && atual !== site.senhaHash && atual !== window.SITE.senhaHash) { erro.textContent = "A senha atual está incorreta."; return; }
     if (a !== b) { erro.textContent = "As senhas novas não são iguais."; return; }
@@ -811,6 +855,7 @@
     document.body.classList.remove("editing");
     mEditar.querySelector("span").textContent = "Editar fotos e produtos";
     try { sessionStorage.removeItem("jl-editor"); } catch (e) {}
+    if (sb) sb.auth.signOut();
   }
   document.getElementById("sair").onclick = sairEditor;
 
@@ -1034,21 +1079,62 @@
   };
 
   // ---------- Salvar direto na pasta do site (só com o servidor.js rodando) ----------
-  fetch("salvar").then(r => { if (r.status === 204) document.body.classList.add("pode-salvar"); }).catch(() => {});
-  // Grava tudo na pasta do site. Mantém marcadas as fotos que estavam marcadas.
+  if (sb) document.body.classList.add("pode-salvar");
+  else fetch("salvar").then(r => { if (r.status === 204) document.body.classList.add("pode-salvar"); }).catch(() => {});
+
+  // ---------- Salvar no Supabase ----------
+  const urlPublica = caminho => sb.storage.from(CFG.bucket).getPublicUrl(caminho).data.publicUrl;
+  const prefixoStorage = () => urlPublica("");
+  async function salvarNoSupabase(conteudo) {
+    const { data: sessao } = await sb.auth.getSession();
+    if (!sessao.session) throw new Error("sessão expirada — saia e entre de novo com a senha");
+    const dados = JSON.parse(JSON.stringify(conteudo));
+    delete dados.senhaHash;
+    // Fotos novas (data:...) viram arquivos no Storage
+    const enviadas = new Map();
+    const enviar = async src => {
+      const m = /^data:image\/(jpeg|png|webp);base64,/.exec(src || "");
+      if (!m) return src;
+      if (enviadas.has(src)) return enviadas.get(src);
+      const blob = await (await fetch(src)).blob();
+      const caminho = `galeria/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${m[1] === "jpeg" ? "jpg" : m[1]}`;
+      const { error } = await sb.storage.from(CFG.bucket).upload(caminho, blob, { contentType: blob.type, cacheControl: "31536000" });
+      if (error) throw new Error("envio de foto: " + error.message);
+      enviadas.set(src, urlPublica(caminho));
+      return enviadas.get(src);
+    };
+    for (const f of dados.fotos) f.src = await enviar(f.src);
+    for (const c of dados.categorias) c.capa = await enviar(c.capa);
+    const { error } = await sb.from("conteudo").upsert({ id: 1, dados, atualizado_em: new Date().toISOString() });
+    if (error) throw new Error(error.message);
+    // Apaga do Storage as fotos que saíram do site (limpeza, se falhar não tem problema)
+    const prefixo = prefixoStorage();
+    const usadas = new Set([...dados.fotos.map(f => f.src), ...dados.categorias.map(c => c.capa)]);
+    const antigas = [...(window.SITE.fotos || []).map(f => f.src), ...(window.SITE.categorias || []).map(c => c.capa)]
+      .filter(s => s && s.startsWith(prefixo) && !usadas.has(s)).map(s => s.slice(prefixo.length));
+    if (antigas.length) sb.storage.from(CFG.bucket).remove([...new Set(antigas)]).catch(() => {});
+    return { ...dados, senhaHash: window.SITE.senhaHash };
+  }
+
+  // Grava tudo (no Supabase ou na pasta do site). Mantém marcadas as fotos que estavam marcadas.
   async function salvarNoSite() {
     const botao = document.getElementById("salvar-site");
     botao.disabled = true; msg.textContent = "Salvando…";
     try {
-      const r = await fetch("salvar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(site) });
-      if (!r.ok) throw new Error(await r.text());
+      let salvo;
+      if (sb) salvo = await salvarNoSupabase(site);
+      else {
+        const r = await fetch("salvar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(site) });
+        if (!r.ok) throw new Error(await r.text());
+        salvo = await r.json();
+      }
       const idxMarcadas = site.fotos.map((f, i) => marcadas.has(f) ? i : -1).filter(i => i >= 0);
-      window.SITE = await r.json();
+      window.SITE = salvo;
       site = original(); marcadas.clear();
       idxMarcadas.forEach(i => site.fotos[i] && marcadas.add(site.fotos[i]));
       try { localStorage.removeItem(CHAVE); } catch (e) {}
       renderCats(); renderFotos(); filtrar(filtroAtual);
-      msg.textContent = "✔ Salvo! As alterações agora fazem parte do site (fotos na pasta fotos/ e textos no galeria.js).";
+      msg.textContent = sb ? "✔ Salvo! Já está no ar para todos os visitantes." : "✔ Salvo! As alterações agora fazem parte do site (fotos na pasta fotos/ e textos no galeria.js).";
       return true;
     } catch (e) {
       msg.textContent = "⚠ Não foi possível salvar: " + e.message + ". Use “Baixar galeria.js”.";
@@ -1057,7 +1143,7 @@
   }
   document.getElementById("salvar-site").onclick = salvarNoSite;
 
-  if (liberado()) entrarEditor();
+  liberadoAsync().then(ok => { if (ok) entrarEditor(); });
 
   // ---------- Foto ampliada (navega apenas pelas fotos visíveis) ----------
   const lb = document.getElementById("lb"), lbImg = lb.querySelector("img"), lbCap = lb.querySelector(".cap");
