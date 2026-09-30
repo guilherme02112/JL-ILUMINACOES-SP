@@ -311,6 +311,14 @@
   .ed-row button:hover { border-color: var(--moss); }
   .ed-row .del { color: #b3452f; }
   .ed-row .del:hover { border-color: #b3452f; }
+  .ed-ok {
+    font: inherit; font-weight: 600; font-size: .9rem; padding: 8px; border-radius: 8px; cursor: pointer;
+    border: 0; background: var(--moss); color: #fff;
+  }
+  .ed-ok:hover { background: var(--moss-dark); }
+  .ed-ok:disabled { opacity: .6; cursor: default; }
+  .item.salvo { animation: salvo 1.6s ease-out; }
+  @keyframes salvo { 0%, 50% { box-shadow: 0 0 0 5px var(--moss); } 100% { box-shadow: var(--shadow); } }
 
   /* ---------- Animação ao rolar ---------- */
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s, transform .7s; }
@@ -667,6 +675,7 @@
              <button data-acao="capa" title="Usar como foto de capa da categoria">Capa</button>
              <button data-acao="del" class="del">Remover</button>
            </div>
+           <button data-acao="ok" class="ed-ok">✔ Salvar</button>
          </div>
        </figure>`).join("");
     atualizarSelecao();
@@ -883,8 +892,15 @@
     const campo = e.target.dataset.campo; if (!campo) return;
     const it = e.target.closest(".item"), f = site.fotos[+it.dataset.i];
     f[campo] = e.target.value;
+    if (campo === "legenda") { it.querySelector("figcaption").textContent = f.legenda; it.querySelector(".ph img").alt = f.legenda; }
     if (campo === "cat") { it.dataset.c = f.cat; filtrar(filtroAtual); }
     salvar();
+  });
+  // Enter no campo da legenda = Salvar
+  grid.addEventListener("keydown", e => {
+    if (e.key === "Enter" && e.target.dataset.campo === "legenda") {
+      e.preventDefault(); e.target.closest(".item").querySelector("[data-acao=ok]").click();
+    }
   });
   grid.addEventListener("change", e => {
     if (e.target.hasAttribute("data-sel")) marcar(e.target.closest(".item"), e.target.checked);
@@ -897,6 +913,21 @@
     if (!e.target.closest(".ed, .sel")) return marcar(it, !it.classList.contains("selecionada"));
     if (!acao) return;
     const f = site.fotos[i];
+    if (acao === "ok") {
+      // Fecha a edição desta foto e grava no site (se o servidor.js estiver rodando)
+      marcadas.delete(f);
+      if (document.body.classList.contains("pode-salvar")) {
+        e.target.disabled = true; e.target.textContent = "Salvando…";
+        if (!await salvarNoSite()) { marcadas.add(f); renderFotos(); return; }
+        msg.textContent = `✔ Legenda “${f.legenda}” salva no site.`;
+      } else {
+        renderFotos(); salvar();
+        msg.textContent = `✔ Legenda “${f.legenda}” salva neste navegador. Para publicar, use “Baixar galeria.js”.`;
+      }
+      const el = grid.querySelector(`.item[data-i="${i}"]`);
+      if (el) el.classList.add("salvo");
+      return;
+    }
     if (acao === "del") {
       if (!await perguntar({ titulo: "Remover foto?", texto: `“${f.legenda}” vai sair da galeria.`, ok: "Remover", perigo: true })) return;
       site.fotos.splice(site.fotos.indexOf(f), 1); marcadas.delete(f);
@@ -1004,21 +1035,27 @@
 
   // ---------- Salvar direto na pasta do site (só com o servidor.js rodando) ----------
   fetch("salvar").then(r => { if (r.status === 204) document.body.classList.add("pode-salvar"); }).catch(() => {});
-  document.getElementById("salvar-site").onclick = async () => {
+  // Grava tudo na pasta do site. Mantém marcadas as fotos que estavam marcadas.
+  async function salvarNoSite() {
     const botao = document.getElementById("salvar-site");
     botao.disabled = true; msg.textContent = "Salvando…";
     try {
       const r = await fetch("salvar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(site) });
       if (!r.ok) throw new Error(await r.text());
+      const idxMarcadas = site.fotos.map((f, i) => marcadas.has(f) ? i : -1).filter(i => i >= 0);
       window.SITE = await r.json();
       site = original(); marcadas.clear();
+      idxMarcadas.forEach(i => site.fotos[i] && marcadas.add(site.fotos[i]));
       try { localStorage.removeItem(CHAVE); } catch (e) {}
       renderCats(); renderFotos(); filtrar(filtroAtual);
       msg.textContent = "✔ Salvo! As alterações agora fazem parte do site (fotos na pasta fotos/ e textos no galeria.js).";
+      return true;
     } catch (e) {
       msg.textContent = "⚠ Não foi possível salvar: " + e.message + ". Use “Baixar galeria.js”.";
+      return false;
     } finally { botao.disabled = false; }
-  };
+  }
+  document.getElementById("salvar-site").onclick = salvarNoSite;
 
   if (liberado()) entrarEditor();
 
