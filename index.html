@@ -1,0 +1,1063 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JL Iluminações SP</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M33 65.5A31 31 0 1 1 67 65.5' fill='none' stroke='%2345a84a' stroke-width='8' stroke-linecap='round'/%3E%3Cpath d='M50 64C42 50 45 32 64 23C67 41 60 56 50 64Z' fill='%236cb843'/%3E%3Cg stroke='%231c8fb5' stroke-width='5' stroke-linecap='round'%3E%3Cpath d='M31 73H69'/%3E%3Cpath d='M36 82H64'/%3E%3Cpath d='M42 91H58'/%3E%3C/g%3E%3C/svg%3E">
+<meta name="description" content="JL Iluminações SP — tudo em iluminação de LED na Santa Ifigênia. Lâmpadas, luminárias de teto, lustres, refletores, arandelas e iluminação pública. Entrega para toda a cidade de São Paulo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f0e6;          /* linho */
+    --bg-2: #ebe3d3;        /* areia */
+    --card: #fffcf6;
+    --line: #ded3bf;
+    --text: #2f3327;        /* oliva escuro */
+    --muted: #6d6a5b;
+    --moss: #56704d;        /* verde musgo */
+    --moss-dark: #3d5237;
+    --moss-soft: rgba(86, 112, 77, .12);
+    --wood: #a86d3c;        /* madeira */
+    --wood-soft: rgba(168, 109, 60, .12);
+    --glow: #f3d6a0;        /* luz quente */
+    --radius: 18px;
+    --shadow: 0 10px 30px rgba(61, 52, 35, .08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Outfit", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { width: min(1180px, 100% - 32px); margin-inline: auto; }
+  h1, h2 { font-family: "Fraunces", Georgia, serif; font-weight: 600; }
+
+  /* ---------- Header ---------- */
+  header {
+    position: fixed; inset: 0 0 auto 0; z-index: 50;
+    background: rgba(245, 240, 230, .88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .5px; font-size: 1.1rem; }
+  .brand .logo { width: 44px; height: 44px; flex: none; }
+  .brand small { color: var(--text); font-weight: 800; }
+  .brand sup { font-size: .55em; margin-left: 2px; }
+  .brand span { font-weight: 800; letter-spacing: .3px; }
+  .menu { display: flex; gap: 28px; font-weight: 500; color: var(--muted); }
+  .menu a:hover { color: var(--moss-dark); }
+  .nav-right { display: flex; align-items: center; gap: 6px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 22px; border-radius: 999px; font-weight: 600; font-size: 1rem; font-family: inherit;
+    border: 1px solid transparent; transition: transform .15s, background .15s, box-shadow .15s;
+    cursor: pointer; white-space: nowrap;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn[hidden] { display: none; }
+  .btn svg { width: 20px; height: 20px; flex: none; }
+  .btn-moss { background: var(--moss); color: #fff; box-shadow: 0 8px 22px rgba(86, 112, 77, .28); }
+  .btn-moss:hover { background: var(--moss-dark); }
+  .btn-wood { background: var(--wood); color: #fff; box-shadow: 0 8px 22px rgba(168, 109, 60, .28); }
+  .btn-ghost { border-color: var(--line); color: var(--text); background: var(--card); }
+  .btn-ghost:hover { border-color: var(--moss); }
+  .btn-light { border-color: rgba(255,255,255,.45); color: #fff; background: rgba(255,255,255,.08); }
+  .btn-light:hover { background: rgba(255,255,255,.18); }
+  .nav .btn { padding: 10px 18px; font-size: .95rem; }
+
+  /* Menu de 3 pontinhos */
+  .dots-wrap { position: relative; }
+  .dots {
+    width: 40px; height: 40px; border-radius: 50%; border: 0; background: transparent; color: var(--muted);
+    display: grid; place-items: center; cursor: pointer;
+  }
+  .dots:hover, .dots[aria-expanded="true"] { background: var(--bg-2); color: var(--text); }
+  .dots svg { width: 22px; height: 22px; }
+  .dots-menu {
+    position: absolute; right: 0; top: 48px; min-width: 220px; display: none;
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); padding: 6px;
+  }
+  .dots-menu.open { display: block; }
+  .dots-menu button {
+    width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 0; border-radius: 8px;
+    background: transparent; color: var(--text); font: inherit; cursor: pointer; text-align: left;
+  }
+  .dots-menu button:hover { background: var(--bg); }
+  .dots-menu svg { width: 18px; height: 18px; color: var(--moss); }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; min-height: 100vh; display: grid; align-items: center; padding: 110px 0 70px; overflow: hidden; color: #fff; }
+  .hero-bg { position: absolute; inset: 0; }
+  .hero-bg img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
+  .hero-bg::after {
+    content: ""; position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, rgba(34, 42, 30, .92) 0%, rgba(34, 42, 30, .7) 50%, rgba(34, 42, 30, .35) 100%),
+      linear-gradient(0deg, rgba(34, 42, 30, .6) 0%, transparent 40%);
+  }
+  .hero-inner { position: relative; display: grid; grid-template-columns: 1.15fr .85fr; gap: 48px; align-items: center; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.25);
+    font-weight: 500; font-size: .9rem; margin-bottom: 22px;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--glow); box-shadow: 0 0 10px var(--glow); }
+  h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); line-height: 1.06; letter-spacing: -1px; }
+  h1 em { font-style: italic; color: var(--glow); }
+  .lead { font-size: clamp(1.05rem, 1.6vw, 1.22rem); color: rgba(255,255,255,.82); margin: 22px 0 32px; max-width: 560px; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .hero-card {
+    background: var(--card); color: var(--text); border-radius: var(--radius); padding: 28px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.25);
+  }
+  .hero-card .big { font-family: "Fraunces", serif; font-size: 3.2rem; font-weight: 600; color: var(--moss); line-height: 1; }
+  .hero-card p { color: var(--muted); }
+  .hero-card hr { border: 0; border-top: 1px solid var(--line); margin: 20px 0; }
+  .info-row { display: flex; gap: 12px; align-items: flex-start; margin-top: 12px; }
+  .info-row svg { width: 20px; height: 20px; color: var(--wood); flex: none; margin-top: 3px; }
+  .info-row span { color: var(--muted); }
+
+  /* ---------- Seções ---------- */
+  section { padding: 90px 0; }
+  .eyebrow { color: var(--wood); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: .82rem; }
+  h2 { font-size: clamp(1.9rem, 4vw, 2.7rem); line-height: 1.15; margin: 8px 0 14px; }
+  .sub { color: var(--muted); max-width: 620px; font-size: 1.08rem; }
+
+  /* ---------- Diferenciais ---------- */
+  .perks { padding: 0; margin-top: -36px; position: relative; z-index: 2; }
+  .perks-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .perk {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 20px; display: flex; gap: 14px; align-items: center;
+  }
+  .perk .ic { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; flex: none; background: var(--moss-soft); color: var(--moss); }
+  .perk .ic svg { width: 24px; height: 24px; }
+  .perk b { display: block; }
+  .perk span { color: var(--muted); font-size: .92rem; }
+
+  /* ---------- Categorias ---------- */
+  .cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 40px; }
+  .cat { border-radius: var(--radius); overflow: hidden; background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow); }
+  .cat-img { position: relative; display: block; aspect-ratio: 3/4; overflow: hidden; cursor: pointer; }
+  .cat-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+  .cat-img:hover img { transform: scale(1.05); }
+  .cat-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(34,42,30,.85), transparent 55%); }
+  .cat-img div { position: absolute; left: 18px; right: 18px; bottom: 16px; z-index: 1; color: #fff; }
+  .cat-img b { font-family: "Fraunces", serif; font-weight: 600; font-size: 1.25rem; display: block; line-height: 1.2; }
+  .cat-img span { color: rgba(255,255,255,.8); font-size: .9rem; }
+
+  /* ---------- Galeria ---------- */
+  #galeria { background: var(--bg-2); }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 30px 0 28px; }
+  .chip {
+    padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--card);
+    color: var(--muted); font: inherit; font-weight: 500; cursor: pointer; transition: all .15s;
+  }
+  .chip:hover { color: var(--text); border-color: var(--moss); }
+  .chip.on { background: var(--moss); color: #fff; border-color: var(--moss); }
+  /* Grade em linhas (esquerda → direita), para a ordem das fotos ser fácil de entender */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; align-items: start; }
+  .item {
+    border-radius: 14px; overflow: hidden; position: relative;
+    background: var(--card); cursor: zoom-in; box-shadow: var(--shadow);
+  }
+  .item .ph { overflow: hidden; aspect-ratio: 3/4; }
+  .item img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+  .item.nova { animation: destaque 2.4s ease-out; }
+  @keyframes destaque { 0%, 40% { box-shadow: 0 0 0 5px var(--wood); } 100% { box-shadow: var(--shadow); } }
+  .item:hover img { transform: scale(1.04); }
+  .item figcaption { padding: 10px 14px; font-size: .92rem; font-weight: 500; }
+  .item.hide { display: none; }
+
+  /* ---------- Sobre ---------- */
+  .about { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+  .about-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .about-photos img { border-radius: var(--radius); aspect-ratio: 3/4; object-fit: cover; width: 100%; box-shadow: var(--shadow); }
+  .about-photos img:last-child { margin-top: 40px; }
+  .list { list-style: none; margin-top: 24px; display: grid; gap: 10px; }
+  .list li { display: flex; gap: 10px; align-items: center; }
+  .list svg { width: 20px; height: 20px; color: var(--moss); flex: none; }
+
+  /* ---------- Avaliações ---------- */
+  .reviews { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; }
+  .review { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; display: flex; flex-direction: column; box-shadow: var(--shadow); }
+  .review .q { font-family: "Fraunces", serif; font-size: 3.4rem; line-height: .7; color: var(--wood); height: 28px; }
+  .review p { font-size: 1.1rem; flex: 1; }
+  .review .who { display: flex; align-items: center; gap: 12px; margin-top: 20px; }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 600; background: var(--moss-soft); color: var(--moss-dark); }
+  .who span { color: var(--muted); font-size: .88rem; display: block; }
+  .reviews-foot { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; color: var(--muted); }
+  .reviews-foot b { color: var(--text); }
+
+  /* ---------- Contato ---------- */
+  #contato { background: var(--bg-2); }
+  .contact { display: grid; grid-template-columns: .9fr 1.1fr; gap: 24px; margin-top: 36px; }
+  .contact-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; display: grid; gap: 22px; align-content: start; box-shadow: var(--shadow); }
+  .c-item { display: flex; gap: 14px; }
+  .c-item .ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--wood-soft); color: var(--wood); flex: none; }
+  .c-item .ic svg { width: 22px; height: 22px; }
+  .c-item small { color: var(--muted); display: block; font-size: .8rem; text-transform: uppercase; letter-spacing: 1px; }
+  .c-item b { font-size: 1.05rem; font-weight: 600; }
+  .map { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); min-height: 380px; background: var(--card); }
+  .map iframe { width: 100%; height: 100%; min-height: 380px; border: 0; filter: sepia(.15) saturate(.9); }
+
+  footer { padding: 30px 0; background: var(--moss-dark); color: rgba(255,255,255,.75); font-size: .9rem; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  /* ---------- WhatsApp flutuante ---------- */
+  .float-wa {
+    position: fixed; right: 18px; bottom: 18px; z-index: 60; width: 60px; height: 60px; border-radius: 50%;
+    background: #25d366; display: grid; place-items: center; box-shadow: 0 10px 30px rgba(37,211,102,.4);
+    animation: pulse 2.6s infinite;
+  }
+  .float-wa svg { width: 32px; height: 32px; color: #fff; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(37,211,102,.45); } 60% { box-shadow: 0 0 0 16px rgba(37,211,102,0); } }
+
+  /* ---------- Lightbox ---------- */
+  .lb { position: fixed; inset: 0; z-index: 100; background: rgba(28, 32, 24, .95); display: none; align-items: center; justify-content: center; }
+  .lb.open { display: flex; }
+  .lb img { max-width: min(92vw, 720px); max-height: 86vh; border-radius: 12px; }
+  .lb button {
+    position: absolute; background: rgba(255,255,255,.12); border: 0; color: #fff; width: 48px; height: 48px;
+    border-radius: 50%; font-size: 1.6rem; cursor: pointer; display: grid; place-items: center;
+  }
+  .lb button:hover { background: rgba(255,255,255,.22); }
+  .lb .x { top: 18px; right: 18px; }
+  .lb .prev { left: 18px; top: 50%; transform: translateY(-50%); }
+  .lb .next { right: 18px; top: 50%; transform: translateY(-50%); }
+  .lb .cap { position: absolute; bottom: 18px; left: 0; right: 0; text-align: center; color: rgba(255,255,255,.8); }
+
+  /* ---------- Janelas (senha) ---------- */
+  .modal { position: fixed; inset: 0; z-index: 120; background: rgba(34, 42, 30, .55); display: none; align-items: center; justify-content: center; padding: 16px; }
+  .modal.open { display: flex; }
+  .modal form { background: var(--card); border-radius: var(--radius); padding: 28px; width: min(380px, 100%); display: grid; gap: 14px; box-shadow: 0 24px 60px rgba(0,0,0,.25); }
+  .modal h3 { font-family: "Fraunces", serif; font-weight: 600; font-size: 1.4rem; display: flex; align-items: center; gap: 8px; }
+  .modal h3 svg { width: 22px; height: 22px; color: var(--moss); }
+  .modal p { color: var(--muted); font-size: .95rem; }
+  .modal input {
+    width: 100%; font: inherit; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--text);
+  }
+  .modal input:focus, .modal select:focus { outline: 2px solid var(--moss); border-color: transparent; }
+  .pg-select { width: 100%; font: inherit; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--text); }
+  .pg-select[hidden] { display: none; }
+  .btn-perigo { background: #b3452f !important; box-shadow: none !important; }
+  .modal .erro { color: #b3452f; font-size: .9rem; min-height: 1.2em; }
+  .modal .row { display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* ---------- Modo de edição ---------- */
+  .edit-bar {
+    display: none; position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 70;
+    width: min(1000px, 100% - 24px); background: var(--moss-dark); color: #fff; border-radius: 16px; padding: 12px 14px;
+    gap: 8px; flex-wrap: wrap; align-items: center; box-shadow: 0 16px 40px rgba(0,0,0,.3);
+  }
+  .editing .edit-bar { display: flex; }
+  .editing .float-wa { display: none; }
+  .editing footer { padding-bottom: 190px; }
+  .edit-bar b { margin-right: auto; font-family: "Fraunces", serif; font-size: 1.05rem; }
+  .edit-bar .btn { padding: 8px 14px; font-size: .9rem; }
+  .edit-msg { flex-basis: 100%; color: rgba(255,255,255,.75); font-size: .85rem; }
+  .ed { display: none; }
+  .editing .ed { display: grid; gap: 6px; padding: 10px; background: var(--card); border-top: 2px dashed var(--wood); }
+  /* Na galeria, os campos só aparecem nas fotos marcadas */
+  .editing .item .ed { display: none; }
+  .editing .item.selecionada .ed { display: grid; }
+  .editing .item.selecionada figcaption { display: none; }
+  .editing .item { cursor: pointer; }
+  .editing .item.selecionada { outline: 3px solid var(--wood); outline-offset: -3px; }
+  .sel { display: none; }
+  .editing .sel {
+    display: grid; place-items: center; position: absolute; top: 8px; left: 8px; z-index: 2;
+    width: 34px; height: 34px; border-radius: 9px; background: rgba(255,252,246,.95); box-shadow: 0 2px 8px rgba(0,0,0,.25); cursor: pointer;
+  }
+  .sel input { width: 20px; height: 20px; accent-color: var(--wood); cursor: pointer; }
+  .sel-bar { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding-top: 8px; border-top: 1px solid rgba(255,255,255,.18); }
+  .sel-bar span { margin-right: auto; font-size: .9rem; }
+  .sel-bar select, .sel-bar button {
+    font: inherit; font-size: .85rem; padding: 7px 12px; border-radius: 999px; cursor: pointer;
+    border: 1px solid rgba(255,255,255,.45); background: rgba(255,255,255,.08); color: #fff;
+  }
+  .sel-bar select option { color: var(--text); }
+  .sel-bar button:disabled, .sel-bar select:disabled { opacity: .45; cursor: default; }
+  #salvar-site { display: none; }
+  .pode-salvar #salvar-site { display: inline-flex; }
+  .ed input, .ed select {
+    width: 100%; font: inherit; font-size: .9rem; padding: 7px 9px; border-radius: 8px;
+    border: 1px solid var(--line); background: var(--bg); color: var(--text);
+  }
+  .ed input:focus, .ed select:focus { outline: 2px solid var(--moss); border-color: transparent; }
+  .ed-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .ed-row button, .ed-row label {
+    flex: 1; font: inherit; font-size: .82rem; padding: 6px; border-radius: 8px; cursor: pointer; text-align: center;
+    border: 1px solid var(--line); background: var(--card); color: var(--text); white-space: nowrap;
+  }
+  .ed-row label:hover { border-color: var(--moss); }
+  .cat-nova { display: none; }
+  .editing .cat-nova {
+    display: grid; place-items: center; align-content: center; gap: 6px; min-height: 260px; cursor: pointer;
+    border: 2px dashed var(--wood); border-radius: var(--radius); background: var(--wood-soft);
+    color: var(--wood); font: inherit; font-weight: 600; font-size: 1.05rem;
+  }
+  .editing .cat-nova b { font-size: 2.4rem; line-height: 1; }
+  .editing .cat-nova:hover { background: rgba(168, 109, 60, .2); }
+  .ed-row button:hover { border-color: var(--moss); }
+  .ed-row .del { color: #b3452f; }
+  .ed-row .del:hover { border-color: #b3452f; }
+
+  /* ---------- Animação ao rolar ---------- */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s, transform .7s; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* ---------- Responsivo ---------- */
+  @media (max-width: 960px) {
+    .menu { display: none; }
+    .hero-inner, .about, .contact { grid-template-columns: 1fr; }
+    .perks-grid { grid-template-columns: 1fr 1fr; }
+    .cats { grid-template-columns: 1fr 1fr; }
+    .reviews { grid-template-columns: 1fr; }
+    .hero { min-height: auto; }
+  }
+  @media (max-width: 560px) {
+    .brand { font-size: .95rem; }
+    .nav .btn span { display: none; }
+    .nav .btn { padding: 10px; }
+    .perks-grid { grid-template-columns: 1fr; }
+    .cats { gap: 10px; }
+    .cat-img b { font-size: 1.05rem; }
+    .cat-img span { display: none; }
+    .grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .item figcaption { font-size: .82rem; padding: 8px 10px; }
+    section { padding: 64px 0; }
+    .cta .btn { flex: 1 1 100%; }
+    .lb .prev, .lb .next { top: auto; bottom: 50px; transform: none; }
+    .edit-bar .btn { flex: 1 1 auto; }
+    .edit-bar b { flex-basis: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Ícones reutilizáveis -->
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35M12.05 21.5h-.01a9.4 9.4 0 0 1-4.8-1.32l-.34-.2-3.57.94.95-3.48-.22-.36A9.4 9.4 0 0 1 2.6 12c0-5.2 4.24-9.45 9.46-9.45a9.4 9.4 0 0 1 9.44 9.46c0 5.2-4.24 9.45-9.45 9.45m8.04-17.5A11.3 11.3 0 0 0 12.05.66C5.79.66.7 5.75.69 12.01c0 2 .52 3.95 1.52 5.67L.6 23.34l5.8-1.52a11.3 11.3 0 0 0 5.43 1.38h.01c6.25 0 11.35-5.09 11.35-11.35 0-3.03-1.18-5.88-3.33-8.02"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+  <!-- Logo JL Iluminações: lâmpada verde com folha e base azul -->
+  <symbol id="i-logo" viewBox="0 0 100 100">
+    <defs>
+      <linearGradient id="lg-arco" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a6ce39"/><stop offset="1" stop-color="#2e9e4f"/></linearGradient>
+      <linearGradient id="lg-folha" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#2e9e4f"/><stop offset="1" stop-color="#8dc63f"/></linearGradient>
+      <linearGradient id="lg-base" gradientUnits="userSpaceOnUse" x1="0" y1="70" x2="0" y2="95"><stop offset="0" stop-color="#1fb5a8"/><stop offset="1" stop-color="#1c6fb5"/></linearGradient>
+    </defs>
+    <path d="M33 65.5A31 31 0 1 1 67 65.5" fill="none" stroke="url(#lg-arco)" stroke-width="7" stroke-linecap="round"/>
+    <path d="M50 64C42 50 45 32 64 23C67 41 60 56 50 64Z" fill="url(#lg-folha)"/>
+    <path d="M50 64C53 50 57 39 62 28" fill="none" stroke="#dff0c4" stroke-width="1.6" stroke-linecap="round"/>
+    <g stroke="url(#lg-base)" stroke-width="4" stroke-linecap="round">
+      <path d="M31 72H69"/><path d="M34 79H66"/><path d="M38 86H62"/><path d="M43 93H57"/>
+    </g>
+  </symbol>
+  <symbol id="i-dots" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></symbol>
+  <symbol id="i-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.2 6.8a2.8 2.8 0 0 0-4-4L3.8 16.2 3 21l4.8-.8Z"/><path d="m15 5 4 4"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+</svg>
+
+<header>
+  <div class="wrap nav">
+    <a href="#inicio" class="brand" aria-label="JL Iluminações SP">
+      <svg class="logo" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-logo"/></svg>
+      <span>JL ILUMINAÇÕES <small>SP</small><sup>®</sup></span>
+    </a>
+    <nav class="menu">
+      <a href="#produtos">Produtos</a>
+      <a href="#galeria">Galeria</a>
+      <a href="#sobre">A loja</a>
+      <a href="#avaliacoes">Avaliações</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <div class="nav-right">
+      <a class="btn btn-moss" href="https://wa.me/5511998563986?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20um%20or%C3%A7amento." target="_blank" rel="noopener">
+        <svg><use href="#i-wa"/></svg><span>WhatsApp</span>
+      </a>
+      <div class="dots-wrap">
+        <button class="dots" id="dots" aria-label="Mais opções" aria-haspopup="true" aria-expanded="false"><svg><use href="#i-dots"/></svg></button>
+        <div class="dots-menu" id="dots-menu" role="menu">
+          <button role="menuitem" id="m-editar"><svg><use href="#i-pencil"/></svg> <span>Editar fotos e produtos</span></button>
+          <button role="menuitem" id="m-senha"><svg><use href="#i-lock"/></svg> <span>Mudar senha</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- INÍCIO -->
+  <section class="hero" id="inicio">
+    <div class="hero-bg"><img src="fotos/foto-28.jpg" alt="" fetchpriority="high"></div>
+    <div class="wrap hero-inner">
+      <div>
+        <span class="badge"><span class="dot"></span> Santa Ifigênia · São Paulo</span>
+        <h1>Tudo em <em>iluminação de LED</em> para sua casa ou empresa</h1>
+        <p class="lead">Lâmpadas, luminárias de teto, lustres, refletores, arandelas, iluminação pública e muito mais. Entrega para toda a cidade de São Paulo.</p>
+        <div class="cta">
+          <a class="btn btn-moss" href="https://wa.me/5511998563986?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20um%20or%C3%A7amento." target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg> Pedir orçamento</a>
+          <a class="btn btn-light" href="#produtos">Ver produtos</a>
+        </div>
+      </div>
+      <aside class="hero-card reveal">
+        <div class="big">5.024</div>
+        <p>avaliações no Google de clientes que recomendam a JL</p>
+        <hr>
+        <div class="info-row"><svg><use href="#i-pin"/></svg><div>R. Santa Ifigênia, 269 – Loja 25<br><span>Santa Ifigênia, São Paulo – SP</span></div></div>
+        <div class="info-row"><svg><use href="#i-clock"/></svg><div>Fecha às 17h30</div></div>
+        <div class="info-row"><svg><use href="#i-phone"/></svg><div><a href="tel:+5511998563986">(11) 99856-3986</a></div></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- DIFERENCIAIS -->
+  <section class="perks">
+    <div class="wrap perks-grid">
+      <div class="perk reveal"><div class="ic"><svg><use href="#i-bulb"/></svg></div><div><b>Tudo em LED</b><span>Econômico e durável</span></div></div>
+      <div class="perk reveal"><div class="ic"><svg><use href="#i-truck"/></svg></div><div><b>Entregamos em SP</b><span>Toda a cidade de São Paulo</span></div></div>
+      <div class="perk reveal"><div class="ic"><svg><use href="#i-tag"/></svg></div><div><b>Preço justo</b><span>Qualidade com ótimo preço</span></div></div>
+      <div class="perk reveal"><div class="ic"><svg><use href="#i-star"/></svg></div><div><b>5.024 avaliações</b><span>Clientes no Google</span></div></div>
+    </div>
+  </section>
+
+  <!-- PRODUTOS -->
+  <section id="produtos">
+    <div class="wrap">
+      <span class="eyebrow">Nossos produtos</span>
+      <h2>Iluminação para cada ambiente</h2>
+      <p class="sub">Do básico ao decorativo: encontre na nossa loja a peça certa para sala, quarto, cozinha, fachada, comércio ou obra.</p>
+      <div class="cats" id="cats"></div>
+    </div>
+  </section>
+
+  <!-- GALERIA -->
+  <section id="galeria">
+    <div class="wrap">
+      <span class="eyebrow">Galeria</span>
+      <h2>Fotos da nossa loja</h2>
+      <p class="sub">Uma amostra do que você encontra na JL. Toque em uma foto para ampliar.</p>
+      <div class="filters" id="filters"></div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <!-- SOBRE -->
+  <section id="sobre">
+    <div class="wrap about">
+      <div class="about-photos reveal">
+        <img src="fotos/foto-10.jpg" alt="Atendimento no balcão da JL Iluminações" loading="lazy">
+        <img src="fotos/foto-16.jpg" alt="Parede de arandelas de LED" loading="lazy">
+      </div>
+      <div class="reveal">
+        <span class="eyebrow">A loja</span>
+        <h2>Na Santa Ifigênia, o endereço da boa iluminação</h2>
+        <p class="sub">A JL Iluminações SP fica no coração da Rua Santa Ifigênia, o polo de iluminação e eletrônicos de São Paulo. Venha ver as peças acesas, comparar modelos e receber orientação de quem entende do assunto.</p>
+        <ul class="list">
+          <li><svg><use href="#i-check"/></svg> Lâmpadas, luminárias de teto e lustres</li>
+          <li><svg><use href="#i-check"/></svg> Refletores, arandelas e iluminação pública</li>
+          <li><svg><use href="#i-check"/></svg> Fitas de LED, fontes e acessórios</li>
+          <li><svg><use href="#i-check"/></svg> Entrega para toda a cidade de São Paulo</li>
+        </ul>
+        <div class="cta" style="margin-top:30px">
+          <a class="btn btn-wood" href="https://www.google.com/maps/dir/?api=1&destination=R.+Santa+Ifig%C3%AAnia,+269+-+Santa+Ifig%C3%AAnia,+S%C3%A3o+Paulo+-+SP,+01207-001" target="_blank" rel="noopener"><svg><use href="#i-pin"/></svg> Como chegar</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AVALIAÇÕES -->
+  <section id="avaliacoes" style="padding-top:0">
+    <div class="wrap">
+      <span class="eyebrow">Avaliações</span>
+      <h2>Quem compra, recomenda</h2>
+      <div class="reviews">
+        <div class="review reveal"><div class="q">“</div><p>Ótimo lugar com preços e qualidade excelente.</p><div class="who"><div class="avatar">F</div><div><b>Felipe Lima</b><span>Avaliação no Google</span></div></div></div>
+        <div class="review reveal"><div class="q">“</div><p>Indicação 100% dos serviços e produtos oferecidos pela JL Iluminações.</p><div class="who"><div class="avatar">T</div><div><b>Tom Guedes</b><span>Avaliação no Google</span></div></div></div>
+        <div class="review reveal"><div class="q">“</div><p>A melhor loja da Santa Efigênia, preço e atendimento exclusivo.</p><div class="who"><div class="avatar">A</div><div><b>André</b><span>Avaliação no Google</span></div></div></div>
+      </div>
+      <div class="reviews-foot">
+        <span><b>5.024 avaliações</b> no Google</span>
+        <a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&query=JL+ILUMINA%C3%87%C3%95ES+SP+Santa+Ifig%C3%AAnia+269" target="_blank" rel="noopener">Ver todas no Google</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTATO -->
+  <section id="contato">
+    <div class="wrap">
+      <span class="eyebrow">Contato</span>
+      <h2>Venha nos visitar ou peça pelo WhatsApp</h2>
+      <div class="contact">
+        <div class="contact-card reveal">
+          <div class="c-item"><div class="ic"><svg><use href="#i-pin"/></svg></div><div><small>Endereço</small><b>R. Santa Ifigênia, 269 – Loja 25<br>Santa Ifigênia, São Paulo – SP<br>CEP 01207-001</b></div></div>
+          <div class="c-item"><div class="ic"><svg><use href="#i-phone"/></svg></div><div><small>Telefone / WhatsApp</small><b><a href="tel:+5511998563986">(11) 99856-3986</a></b></div></div>
+          <div class="c-item"><div class="ic"><svg><use href="#i-clock"/></svg></div><div><small>Horário</small><b>Fecha às 17h30</b></div></div>
+          <div class="c-item"><div class="ic"><svg><use href="#i-truck"/></svg></div><div><small>Entrega</small><b>Para toda a cidade de São Paulo</b></div></div>
+          <div class="cta">
+            <a class="btn btn-moss" href="https://wa.me/5511998563986?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20um%20or%C3%A7amento." target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg> WhatsApp</a>
+            <a class="btn btn-ghost" href="tel:+5511998563986"><svg><use href="#i-phone"/></svg> Ligar</a>
+          </div>
+        </div>
+        <div class="map reveal">
+          <iframe title="Mapa: R. Santa Ifigênia, 269" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            src="https://maps.google.com/maps?q=R.%20Santa%20Ifig%C3%AAnia%2C%20269%20-%20Santa%20Ifig%C3%AAnia%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2001207-001&z=17&output=embed"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="ano"></span> JL Iluminações SP · R. Santa Ifigênia, 269 – Lj 25, São Paulo – SP</span>
+    <span>Tudo em iluminação de LED</span>
+  </div>
+</footer>
+
+<a class="float-wa" href="https://wa.me/5511998563986?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20um%20or%C3%A7amento." target="_blank" rel="noopener" aria-label="Falar no WhatsApp"><svg><use href="#i-wa"/></svg></a>
+
+<!-- Barra do modo de edição -->
+<div class="edit-bar" id="edit-bar">
+  <b>Modo de edição</b>
+  <label class="btn btn-wood">+ Adicionar fotos<input type="file" id="add-fotos" accept="image/*" multiple hidden></label>
+  <button class="btn btn-moss" id="salvar-site" style="background:#fff;color:var(--moss-dark)">✔ Salvar no site</button>
+  <button class="btn btn-ghost" id="baixar">Baixar galeria.js</button>
+  <button class="btn btn-light" id="trocar-senha">Trocar senha</button>
+  <button class="btn btn-light" id="descartar">Descartar</button>
+  <button class="btn btn-light" id="sair">Sair</button>
+  <div class="sel-bar">
+    <span id="sel-n">Marque a caixinha das fotos que quer editar.</span>
+    <button id="sel-todas">Selecionar todas</button>
+    <select id="sel-cat"><option value="">Mover marcadas para…</option></select>
+    <button id="sel-del">Remover marcadas</button>
+    <button id="sel-limpar">Desmarcar</button>
+  </div>
+  <span class="edit-msg" id="edit-msg">Edite os nomes dos produtos nos cartões e marque as fotos para editar a legenda. Clique em “Salvar no site” para gravar.</span>
+</div>
+
+<!-- Janela: pedir senha -->
+<div class="modal" id="modal-senha">
+  <form id="form-senha">
+    <h3><svg><use href="#i-lock"/></svg> Área de edição</h3>
+    <p>Digite a senha para editar as fotos e os nomes dos produtos.</p>
+    <input type="password" id="senha" placeholder="Senha" autocomplete="current-password" required>
+    <div class="erro" id="senha-erro"></div>
+    <div class="row">
+      <button type="button" class="btn btn-ghost" data-fechar>Cancelar</button>
+      <button type="submit" class="btn btn-moss">Entrar</button>
+    </div>
+  </form>
+</div>
+
+<!-- Janela: trocar senha -->
+<div class="modal" id="modal-nova">
+  <form id="form-nova">
+    <h3><svg><use href="#i-lock"/></svg> Mudar senha de acesso</h3>
+    <p>Senha usada para entrar na edição de fotos e produtos.</p>
+    <input type="password" id="atual" placeholder="Senha atual" autocomplete="current-password" required>
+    <input type="password" id="nova1" placeholder="Nova senha" autocomplete="new-password" minlength="4" required>
+    <input type="password" id="nova2" placeholder="Repita a nova senha" autocomplete="new-password" minlength="4" required>
+    <div class="erro" id="nova-erro"></div>
+    <div class="row">
+      <button type="button" class="btn btn-ghost" data-fechar>Cancelar</button>
+      <button type="submit" class="btn btn-moss">Salvar</button>
+    </div>
+  </form>
+</div>
+
+<!-- Janela: confirmar / escolher (usada no lugar do confirm() do navegador, que alguns navegadores bloqueiam) -->
+<div class="modal" id="modal-pergunta">
+  <form id="form-pergunta">
+    <h3 id="pg-titulo"></h3>
+    <p id="pg-texto"></p>
+    <select id="pg-opcoes" class="pg-select"></select>
+    <div class="row">
+      <button type="button" class="btn btn-ghost" data-fechar>Cancelar</button>
+      <button type="submit" class="btn btn-moss" id="pg-ok">OK</button>
+    </div>
+  </form>
+</div>
+
+<div class="lb" id="lb" aria-hidden="true">
+  <button class="x" aria-label="Fechar">×</button>
+  <button class="prev" aria-label="Anterior">‹</button>
+  <img alt="">
+  <button class="next" aria-label="Próxima">›</button>
+  <div class="cap"></div>
+</div>
+
+<script src="galeria.js"></script>
+<script>
+  const CHAVE = "jl-site-rascunho";
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const original = () => JSON.parse(JSON.stringify(window.SITE));
+
+  // Rascunho salvo neste navegador (modo de edição) tem prioridade sobre galeria.js
+  let site;
+  try { site = JSON.parse(localStorage.getItem(CHAVE)); } catch (e) {}
+  if (!site || !Array.isArray(site.fotos)) site = original();
+
+  const catsEl = document.getElementById("cats");
+  const filtersEl = document.getElementById("filters");
+  const grid = document.getElementById("grid");
+  let filtroAtual = "todos";
+  const marcadas = new Set();   // fotos marcadas para editar (guarda o próprio objeto, então sobrevive a reordenar)
+  const nomeCat = id => (site.categorias.find(c => c.id === id) || {}).nome || id;
+
+  function renderCats() {
+    catsEl.innerHTML = site.categorias.map((c, i) =>
+      `<div class="cat" data-ci="${i}">
+         <a class="cat-img" href="#galeria" data-go="${c.id}">
+           <img src="${esc(c.capa)}" alt="${esc(c.nome)}" loading="lazy">
+           <div><b>${esc(c.nome)}</b><span>${esc(c.desc)}</span></div>
+         </a>
+         <div class="ed">
+           <input data-ccampo="nome" value="${esc(c.nome)}" placeholder="Nome do produto">
+           <input data-ccampo="desc" value="${esc(c.desc)}" placeholder="Descrição curta">
+           <div class="ed-row">
+             <button data-cacao="esq" title="Mover para trás">◀</button>
+             <button data-cacao="dir" title="Mover para frente">▶</button>
+             <label title="Trocar a foto deste item">Foto<input type="file" accept="image/*" data-cfoto hidden></label>
+             <button data-cacao="del" class="del">Remover</button>
+           </div>
+         </div>
+       </div>`).join("") +
+      `<button class="cat-nova" data-cacao="novo"><b>+</b>Novo item</button>`;
+    filtersEl.innerHTML = `<button class="chip" data-f="todos">Todos</button>` +
+      site.categorias.map(c => `<button class="chip" data-f="${c.id}">${esc(c.nome)}</button>`).join("");
+    filtersEl.querySelectorAll(".chip").forEach(ch => ch.classList.toggle("on", ch.dataset.f === filtroAtual));
+    document.getElementById("sel-cat").innerHTML = `<option value="">Mover marcadas para…</option>` +
+      site.categorias.map(c => `<option value="${c.id}">${esc(c.nome)}</option>`).join("");
+  }
+
+  function renderFotos() {
+    grid.innerHTML = site.fotos.map((f, i) =>
+      `<figure class="item${filtroAtual !== "todos" && f.cat !== filtroAtual ? " hide" : ""}${marcadas.has(f) ? " selecionada" : ""}" data-c="${f.cat}" data-i="${i}">
+         <label class="sel" title="Marcar para editar"><input type="checkbox" data-sel${marcadas.has(f) ? " checked" : ""}></label>
+         <div class="ph"><img src="${esc(f.src)}" alt="${esc(f.legenda)}" loading="lazy"></div>
+         <figcaption>${esc(f.legenda)}</figcaption>
+         <div class="ed">
+           <input data-campo="legenda" value="${esc(f.legenda)}" placeholder="Nome do produto / legenda">
+           <select data-campo="cat">${site.categorias.map(c => `<option value="${c.id}"${c.id === f.cat ? " selected" : ""}>${esc(c.nome)}</option>`).join("")}</select>
+           <div class="ed-row">
+             <button data-acao="esq" title="Mover para trás">◀</button>
+             <button data-acao="dir" title="Mover para frente">▶</button>
+             <button data-acao="capa" title="Usar como foto de capa da categoria">Capa</button>
+             <button data-acao="del" class="del">Remover</button>
+           </div>
+         </div>
+       </figure>`).join("");
+    atualizarSelecao();
+  }
+
+  function atualizarSelecao() {
+    const n = marcadas.size;
+    document.getElementById("sel-n").textContent = n
+      ? `${n} foto${n > 1 ? "s" : ""} marcada${n > 1 ? "s" : ""}`
+      : "Marque a caixinha das fotos que quer editar.";
+    ["sel-cat", "sel-del", "sel-limpar"].forEach(id => document.getElementById(id).disabled = !n);
+  }
+  function marcar(it, sim) {
+    const f = site.fotos[+it.dataset.i];
+    sim ? marcadas.add(f) : marcadas.delete(f);
+    it.classList.toggle("selecionada", sim);
+    it.querySelector("[data-sel]").checked = sim;
+    atualizarSelecao();
+  }
+  renderCats(); renderFotos();
+
+  // Filtros
+  function filtrar(f) {
+    filtroAtual = f;
+    filtersEl.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c.dataset.f === f));
+    grid.querySelectorAll(".item").forEach(el => el.classList.toggle("hide", f !== "todos" && el.dataset.c !== f));
+  }
+  filtersEl.addEventListener("click", e => { const c = e.target.closest(".chip"); if (c) filtrar(c.dataset.f); });
+  catsEl.addEventListener("click", e => {
+    const a = e.target.closest("[data-go]"); if (!a) return;
+    if (editando()) { e.preventDefault(); return; }
+    filtrar(a.dataset.go);
+  });
+
+  // ---------- Menu ⋮ e senha ----------
+  const dots = document.getElementById("dots"), dotsMenu = document.getElementById("dots-menu");
+  const mEditar = document.getElementById("m-editar");
+  function menu(abrir) { dotsMenu.classList.toggle("open", abrir); dots.setAttribute("aria-expanded", abrir); }
+  dots.onclick = e => { e.stopPropagation(); menu(!dotsMenu.classList.contains("open")); };
+  document.addEventListener("click", () => menu(false));
+
+  async function sha256(txt) {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(txt));
+    return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+  }
+  const modalSenha = document.getElementById("modal-senha"), modalNova = document.getElementById("modal-nova");
+  function abrirModal(m) { m.classList.add("open"); (m.querySelector("input, select:not([hidden]), [type=submit]")).focus(); }
+  function fecharModal(m) {
+    m.classList.remove("open"); m.querySelector("form").reset();
+    const erro = m.querySelector(".erro"); if (erro) erro.textContent = "";
+    if (m.resolver) { m.resolver(null); m.resolver = null; }
+  }
+  document.querySelectorAll(".modal").forEach(m => {
+    m.addEventListener("click", e => { if (e.target === m || e.target.hasAttribute("data-fechar")) fecharModal(m); });
+  });
+
+  // Pergunta dentro do próprio site. Devolve true / a opção escolhida, ou null se cancelar.
+  const modalPg = document.getElementById("modal-pergunta"), pgOpcoes = document.getElementById("pg-opcoes");
+  function perguntar({ titulo, texto, ok = "OK", perigo = false, opcoes = null, padrao = "", semCancelar = false }) {
+    modalPg.querySelector("[data-fechar]").hidden = semCancelar;
+    document.getElementById("pg-titulo").textContent = titulo;
+    document.getElementById("pg-texto").textContent = texto;
+    const botaoOk = document.getElementById("pg-ok");
+    botaoOk.textContent = ok; botaoOk.classList.toggle("btn-perigo", perigo);
+    pgOpcoes.hidden = !opcoes;
+    pgOpcoes.innerHTML = (opcoes || []).map(([v, t]) => `<option value="${v}">${esc(t)}</option>`).join("");
+    return new Promise(resolver => {
+      modalPg.resolver = resolver;
+      abrirModal(modalPg);
+      if (opcoes) pgOpcoes.value = padrao || opcoes[0][0];
+    });
+  }
+  document.getElementById("form-pergunta").addEventListener("submit", e => {
+    e.preventDefault();
+    const r = modalPg.resolver, valor = pgOpcoes.hidden ? true : pgOpcoes.value;
+    modalPg.resolver = null; fecharModal(modalPg); r && r(valor);
+  });
+
+  const liberado = () => { try { return sessionStorage.getItem("jl-editor") === "1"; } catch (e) { return false; } };
+  mEditar.onclick = () => {
+    if (editando()) sairEditor();
+    else if (liberado()) entrarEditor();
+    else abrirModal(modalSenha);
+  };
+  document.getElementById("form-senha").addEventListener("submit", async e => {
+    e.preventDefault();
+    const hash = await sha256(document.getElementById("senha").value);
+    if (hash === site.senhaHash || hash === window.SITE.senhaHash) {
+      try { sessionStorage.setItem("jl-editor", "1"); } catch (err) {}
+      fecharModal(modalSenha); entrarEditor();
+    } else {
+      document.getElementById("senha-erro").textContent = "Senha incorreta.";
+      document.getElementById("senha").select();
+    }
+  });
+  document.getElementById("trocar-senha").onclick = () => abrirModal(modalNova);
+  document.getElementById("m-senha").onclick = () => abrirModal(modalNova);
+  document.getElementById("form-nova").addEventListener("submit", async e => {
+    e.preventDefault();
+    const erro = document.getElementById("nova-erro");
+    const atual = await sha256(document.getElementById("atual").value);
+    const a = document.getElementById("nova1").value, b = document.getElementById("nova2").value;
+    const comServidor = document.body.classList.contains("pode-salvar");
+    if (!comServidor && atual !== site.senhaHash && atual !== window.SITE.senhaHash) { erro.textContent = "A senha atual está incorreta."; return; }
+    if (a !== b) { erro.textContent = "As senhas novas não são iguais."; return; }
+    const nova = await sha256(a);
+    let texto;
+    if (comServidor) {
+      // Com o servidor.js rodando: grava na hora, só a senha (o resto do site não muda). O servidor confere a senha atual.
+      const r = await fetch("senha", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ atualHash: atual, novaHash: nova }) }).catch(() => null);
+      if (!r || !r.ok) { erro.textContent = r ? (r.status === 403 ? "A senha atual está incorreta." : await r.text()) : "Servidor desligado — rode o servidor.js."; return; }
+      window.SITE.senhaHash = nova;
+      texto = "A nova senha já está valendo.";
+    } else {
+      texto = "Para valer em todos os aparelhos, entre na edição, clique em “Baixar galeria.js” e substitua o arquivo do site.";
+    }
+    site.senhaHash = nova; salvar();
+    fecharModal(modalNova);
+    if (editando()) msg.textContent = "Senha alterada. " + texto;
+    perguntar({ titulo: "Senha alterada", texto, ok: "OK", semCancelar: true });
+  });
+
+  // ---------- Modo de edição ----------
+  const msg = document.getElementById("edit-msg");
+  const msgPadrao = msg.textContent;
+  const editando = () => document.body.classList.contains("editing");
+  function entrarEditor() {
+    document.body.classList.add("editing");
+    mEditar.querySelector("span").textContent = "Sair da edição";
+    document.getElementById("produtos").scrollIntoView({ behavior: "smooth" });
+  }
+  function sairEditor() {
+    document.body.classList.remove("editing");
+    mEditar.querySelector("span").textContent = "Editar fotos e produtos";
+    try { sessionStorage.removeItem("jl-editor"); } catch (e) {}
+  }
+  document.getElementById("sair").onclick = sairEditor;
+
+  function salvar() {
+    try {
+      localStorage.setItem(CHAVE, JSON.stringify(site));
+      msg.textContent = msgPadrao;
+    } catch (e) {
+      msg.textContent = "⚠ Espaço do navegador cheio — clique em “Baixar galeria.js” agora para não perder as alterações.";
+    }
+  }
+
+  // Nomes e descrições dos produtos (categorias)
+  // Tabela de itens: adicionar, reordenar, trocar foto e remover
+  const FOTO_VAZIA = "data:image/svg+xml," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400"><rect width="300" height="400" fill="#ebe3d3"/><text x="150" y="210" font-family="sans-serif" font-size="22" fill="#a86d3c" text-anchor="middle">Clique em “Foto”</text></svg>');
+  function reRenderTudo() { renderCats(); renderFotos(); filtrar(site.categorias.some(c => c.id === filtroAtual) ? filtroAtual : "todos"); salvar(); }
+  catsEl.addEventListener("click", async e => {
+    const b = e.target.closest("[data-cacao]"); if (!b || !editando()) return;
+    const acao = b.dataset.cacao;
+    if (acao === "novo") {
+      site.categorias.push({ id: "item-" + Date.now().toString(36), nome: "Novo item", desc: "", capa: FOTO_VAZIA });
+      reRenderTudo();
+      const ultimo = catsEl.querySelectorAll(".cat");
+      const input = ultimo[ultimo.length - 1].querySelector("[data-ccampo=nome]");
+      input.scrollIntoView({ behavior: "smooth", block: "center" }); input.select();
+      msg.textContent = "Item criado. Digite o nome, a descrição e clique em “Foto” para escolher a imagem.";
+      return;
+    }
+    const i = +b.closest(".cat").dataset.ci, c = site.categorias[i];
+    if (acao === "del") {
+      if (site.categorias.length === 1) { msg.textContent = "O site precisa ter pelo menos um item."; return; }
+      const qtd = site.fotos.filter(f => f.cat === c.id).length;
+      let destino = true;
+      if (qtd) {
+        destino = await perguntar({
+          titulo: `Remover “${c.nome}”?`,
+          texto: `Esse item tem ${qtd} foto(s) na galeria. O que fazer com elas?`,
+          ok: "Remover", perigo: true,
+          opcoes: [["__apagar", "Remover as fotos também"], ...site.categorias.filter(o => o !== c).map(o => [o.id, "Mover para " + o.nome])],
+        });
+      } else {
+        destino = await perguntar({ titulo: `Remover “${c.nome}”?`, texto: "O item vai sair da tabela de produtos.", ok: "Remover", perigo: true });
+      }
+      if (!destino) return;
+      if (destino === "__apagar") site.fotos = site.fotos.filter(f => f.cat !== c.id);
+      else if (typeof destino === "string") site.fotos.forEach(f => { if (f.cat === c.id) f.cat = destino; });
+      site.categorias.splice(i, 1);
+      msg.textContent = `“${c.nome}” removido. Clique em “Salvar no site” para gravar.`;
+    } else {
+      const j = i + (acao === "esq" ? -1 : 1);
+      if (j < 0 || j >= site.categorias.length) return;
+      [site.categorias[i], site.categorias[j]] = [site.categorias[j], site.categorias[i]];
+    }
+    reRenderTudo();
+  });
+  catsEl.addEventListener("change", async e => {
+    if (!e.target.hasAttribute("data-cfoto")) return;
+    const arq = e.target.files[0]; if (!arq) return;
+    const c = site.categorias[+e.target.closest(".cat").dataset.ci];
+    try { c.capa = await reduzir(arq); } catch (err) { msg.textContent = "Não foi possível abrir " + arq.name; return; }
+    renderCats(); salvar();
+    msg.textContent = `Foto de “${c.nome}” trocada.`;
+  });
+
+  catsEl.addEventListener("input", e => {
+    const campo = e.target.dataset.ccampo; if (!campo) return;
+    const card = e.target.closest(".cat"), c = site.categorias[+card.dataset.ci];
+    c[campo] = e.target.value;
+    card.querySelector(campo === "nome" ? ".cat-img b" : ".cat-img span").textContent = e.target.value;
+    if (campo === "nome") {
+      filtersEl.querySelector(`[data-f="${c.id}"]`).textContent = c.nome;
+      grid.querySelectorAll(`option[value="${c.id}"]`).forEach(o => o.textContent = c.nome);
+    }
+    salvar();
+  });
+
+  // Legenda e categoria de cada foto
+  grid.addEventListener("input", e => {
+    const campo = e.target.dataset.campo; if (!campo) return;
+    const it = e.target.closest(".item"), f = site.fotos[+it.dataset.i];
+    f[campo] = e.target.value;
+    if (campo === "cat") { it.dataset.c = f.cat; filtrar(filtroAtual); }
+    salvar();
+  });
+  grid.addEventListener("change", e => {
+    if (e.target.hasAttribute("data-sel")) marcar(e.target.closest(".item"), e.target.checked);
+  });
+  grid.addEventListener("click", async e => {
+    const it = e.target.closest(".item"); if (!it) return;
+    const i = +it.dataset.i, acao = e.target.dataset.acao;
+    if (!editando()) return mostrar(i);
+    // Clicar na foto também marca/desmarca
+    if (!e.target.closest(".ed, .sel")) return marcar(it, !it.classList.contains("selecionada"));
+    if (!acao) return;
+    const f = site.fotos[i];
+    if (acao === "del") {
+      if (!await perguntar({ titulo: "Remover foto?", texto: `“${f.legenda}” vai sair da galeria.`, ok: "Remover", perigo: true })) return;
+      site.fotos.splice(site.fotos.indexOf(f), 1); marcadas.delete(f);
+      msg.textContent = "Foto removida. Clique em “Salvar no site” para gravar.";
+    } else if (acao === "capa") {
+      site.categorias.find(c => c.id === f.cat).capa = f.src;
+      renderCats(); salvar();
+      msg.textContent = `Foto definida como capa de “${nomeCat(f.cat)}”.`;
+      return;
+    } else {
+      const j = i + (acao === "esq" ? -1 : 1);
+      if (j < 0 || j >= site.fotos.length) return;
+      [site.fotos[i], site.fotos[j]] = [site.fotos[j], site.fotos[i]];
+    }
+    renderFotos(); salvar();
+  });
+
+  // Reduz a foto (máx. 1200px) para o arquivo não ficar pesado
+  function reduzir(arquivo) {
+    return new Promise((ok, erro) => {
+      const img = new Image();
+      img.onload = () => {
+        const r = Math.min(1, 1200 / Math.max(img.width, img.height));
+        const c = document.createElement("canvas");
+        c.width = Math.round(img.width * r); c.height = Math.round(img.height * r);
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(img.src);
+        ok(c.toDataURL("image/jpeg", 0.82));
+      };
+      img.onerror = erro;
+      img.src = URL.createObjectURL(arquivo);
+    });
+  }
+  document.getElementById("add-fotos").addEventListener("change", async e => {
+    const arquivos = [...e.target.files]; e.target.value = "";
+    if (!arquivos.length) return;
+    // Pergunta em qual categoria as fotos entram
+    const cat = await perguntar({
+      titulo: `Adicionar ${arquivos.length} foto${arquivos.length > 1 ? "s" : ""}`,
+      texto: "Em qual categoria de produto?",
+      ok: "Adicionar",
+      opcoes: site.categorias.map(c => [c.id, c.nome]),
+      padrao: filtroAtual !== "todos" ? filtroAtual : "",
+    });
+    if (!cat) return;
+    msg.textContent = "Adicionando…";
+    // Entram no começo da categoria escolhida (logo antes da primeira foto dela)
+    let pos = site.fotos.findIndex(f => f.cat === cat);
+    if (pos < 0) pos = site.fotos.length;
+    const novas = [];
+    for (const a of arquivos) {
+      try { novas.push({ src: await reduzir(a), cat, legenda: a.name.replace(/\.[^.]+$/, "") }); }
+      catch (err) { msg.textContent = "Não foi possível abrir " + a.name; }
+    }
+    if (!novas.length) return;
+    site.fotos.splice(pos, 0, ...novas);
+    novas.forEach(f => marcadas.add(f));   // já ficam marcadas para digitar o nome
+    filtroAtual = cat;
+    renderFotos(); filtrar(cat); salvar();
+    const primeira = grid.querySelector(`.item[data-i="${pos}"]`);
+    novas.forEach((_, k) => grid.querySelector(`.item[data-i="${pos + k}"]`).classList.add("nova"));
+    primeira.scrollIntoView({ behavior: "smooth", block: "center" });
+    primeira.querySelector("[data-campo=legenda]").select();
+    msg.textContent = `${novas.length} foto(s) adicionada(s) em “${nomeCat(cat)}”. Digite o nome do produto e clique em “Salvar no site”.`;
+  });
+
+  document.getElementById("baixar").onclick = () => {
+    const js = "// Conteúdo editável do site (gerado pelo modo de edição).\n" +
+      "window.SITE = " + JSON.stringify(site, null, 2) + ";\n";
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([js], { type: "text/javascript" }));
+    a.download = "galeria.js"; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    msg.textContent = "Arquivo baixado. Substitua o galeria.js da pasta do site por ele para publicar as alterações.";
+  };
+  document.getElementById("descartar").onclick = async () => {
+    if (!await perguntar({ titulo: "Descartar alterações?", texto: "Tudo o que não foi salvo no site volta a ser como era.", ok: "Descartar", perigo: true })) return;
+    try { localStorage.removeItem(CHAVE); } catch (e) {}
+    site = original(); marcadas.clear();
+    renderCats(); renderFotos(); filtrar("todos");
+  };
+
+  // ---------- Ações nas fotos marcadas ----------
+  document.getElementById("sel-todas").onclick = () => {
+    grid.querySelectorAll(".item:not(.hide)").forEach(it => marcar(it, true));
+  };
+  document.getElementById("sel-limpar").onclick = () => {
+    marcadas.clear(); renderFotos();
+  };
+  document.getElementById("sel-cat").onchange = e => {
+    const cat = e.target.value; if (!cat) return;
+    marcadas.forEach(f => f.cat = cat);
+    const n = marcadas.size;
+    renderFotos(); salvar();
+    msg.textContent = `${n} foto(s) movida(s) para “${nomeCat(cat)}”.`;
+    e.target.value = "";
+  };
+  document.getElementById("sel-del").onclick = async () => {
+    const n = marcadas.size;
+    if (!await perguntar({ titulo: `Remover ${n} foto${n > 1 ? "s" : ""}?`, texto: "As fotos marcadas vão sair da galeria.", ok: "Remover", perigo: true })) return;
+    site.fotos = site.fotos.filter(f => !marcadas.has(f));
+    marcadas.clear(); renderFotos(); salvar();
+    msg.textContent = `${n} foto(s) removida(s). Clique em “Salvar no site” para gravar.`;
+  };
+
+  // ---------- Salvar direto na pasta do site (só com o servidor.js rodando) ----------
+  fetch("salvar").then(r => { if (r.status === 204) document.body.classList.add("pode-salvar"); }).catch(() => {});
+  document.getElementById("salvar-site").onclick = async () => {
+    const botao = document.getElementById("salvar-site");
+    botao.disabled = true; msg.textContent = "Salvando…";
+    try {
+      const r = await fetch("salvar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(site) });
+      if (!r.ok) throw new Error(await r.text());
+      window.SITE = await r.json();
+      site = original(); marcadas.clear();
+      try { localStorage.removeItem(CHAVE); } catch (e) {}
+      renderCats(); renderFotos(); filtrar(filtroAtual);
+      msg.textContent = "✔ Salvo! As alterações agora fazem parte do site (fotos na pasta fotos/ e textos no galeria.js).";
+    } catch (e) {
+      msg.textContent = "⚠ Não foi possível salvar: " + e.message + ". Use “Baixar galeria.js”.";
+    } finally { botao.disabled = false; }
+  };
+
+  if (liberado()) entrarEditor();
+
+  // ---------- Foto ampliada (navega apenas pelas fotos visíveis) ----------
+  const lb = document.getElementById("lb"), lbImg = lb.querySelector("img"), lbCap = lb.querySelector(".cap");
+  let atual = 0;
+  const visiveis = () => [...grid.querySelectorAll(".item:not(.hide)")].map(el => +el.dataset.i);
+  function mostrar(i) {
+    atual = i;
+    const f = site.fotos[i];
+    lbImg.src = f.src; lbImg.alt = f.legenda; lbCap.textContent = f.legenda;
+    lb.classList.add("open"); lb.setAttribute("aria-hidden", "false");
+  }
+  function passo(d) { const v = visiveis(); mostrar(v[(v.indexOf(atual) + d + v.length) % v.length]); }
+  function fechar() { lb.classList.remove("open"); lb.setAttribute("aria-hidden", "true"); }
+  lb.querySelector(".x").onclick = fechar;
+  lb.querySelector(".prev").onclick = () => passo(-1);
+  lb.querySelector(".next").onclick = () => passo(1);
+  lb.addEventListener("click", e => { if (e.target === lb) fechar(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") { fechar(); document.querySelectorAll(".modal.open").forEach(fecharModal); }
+    if (!lb.classList.contains("open")) return;
+    if (e.key === "ArrowLeft") passo(-1);
+    if (e.key === "ArrowRight") passo(1);
+  });
+  let toqueX = null;
+  lb.addEventListener("touchstart", e => toqueX = e.touches[0].clientX, { passive: true });
+  lb.addEventListener("touchend", e => {
+    if (toqueX === null) return;
+    const dx = e.changedTouches[0].clientX - toqueX;
+    if (Math.abs(dx) > 50) passo(dx < 0 ? 1 : -1);
+    toqueX = null;
+  });
+
+  // Animação ao rolar
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12 });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+  document.getElementById("ano").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
