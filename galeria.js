@@ -1,5 +1,5 @@
 // Conteúdo editável do site (categorias de produtos e fotos da galeria).
-// Senha alterada em 30/09/2026, 15:47:35.
+// Gerado pelo botão "Salvar no site" em 30/09/2026, 15:52:03.
 window.SITE = {
   "senhaHash": "9ba64c36098660c518110291c1e253d0423a1ef1a7aba890b6db87bcfea61b7a",
   "categorias": [
@@ -53,16 +53,6 @@ window.SITE = {
     }
   ],
   "fotos": [
-    {
-      "src": "fotos/nova-1790793197776-1.jpg",
-      "cat": "arandelas",
-      "legenda": "enhanced-interior"
-    },
-    {
-      "src": "fotos/nova-1790793197777-2.jpg",
-      "cat": "arandelas",
-      "legenda": "image"
-    },
     {
       "src": "fotos/foto-19.jpg",
       "cat": "arandelas",
